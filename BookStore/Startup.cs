@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookStore.Models;
+using BookStore.Models.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +32,7 @@ namespace BookStore
             opt.UseSqlServer(Configuration["ConnectionString"])
             );
             services.AddScoped<ApplicationContext>();
+            services.AddTransient<EntityInitializer>();
             services.AddControllers();
         }
 

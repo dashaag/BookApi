@@ -31,8 +31,44 @@ namespace BookStore.Controllers
             return new CollectionResultDto<CategoryDto>
             {
                 IsSuccessful = true,
-                Result = categories
+                Data = categories
             };
+        }
+
+        [HttpDelete]
+        public ResultDto DeleteCategory( int id)
+        {
+            try
+            {
+                if (id != null)
+                {
+                    var c = _context.Categories.Find(id);
+                    _context.Categories.Remove(c);
+                    _context.SaveChanges();
+                    return new ResultDto
+                    {
+                        IsSuccessful = true,
+                        Message = "Successfully deleted"
+                    };
+                }
+                else
+                {
+                    return new ResultDto
+                    {
+                        IsSuccessful = false,
+                        Message = "Id is not defined"
+                    };
+                }
+            }
+            catch(Exception)
+            {
+                return new ResultDto
+                {
+                    IsSuccessful = false,
+                    Message = "Something goes wrong"
+                };
+            }
+
         }
     }
 }

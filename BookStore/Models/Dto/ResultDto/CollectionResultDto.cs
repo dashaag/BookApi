@@ -7,6 +7,6 @@ namespace BookStore.Models.Dto.ResultDto
 {
     public class CollectionResultDto<T>: ResultDto
     {
-        public ICollection<T> Result { get; set; }
+        public ICollection<T> Data { get; set; }
     }
 }
