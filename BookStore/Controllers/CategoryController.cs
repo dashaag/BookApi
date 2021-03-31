@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BookStore.Models;
 using BookStore.Models.Dto;
 using BookStore.Models.Dto.ResultDto;
+using BookStore.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,9 +22,9 @@ namespace BookStore.Controllers
             _context = context;
         }
 
-        public CollectionResultDto<CategoryDto> GetCategories()
+        public ResultDto GetCategories()
         {
-            var categories =_context.Categories.Select(c => new CategoryDto()
+            var categories = _context.Categories.Select(c => new CategoryDto()
             {
                 Id = c.Id,
                 Name = c.Name
@@ -36,7 +37,7 @@ namespace BookStore.Controllers
         }
 
         [HttpDelete]
-        public ResultDto DeleteCategory( int id)
+        public ResultDto DeleteCategory(int id)
         {
             try
             {
@@ -60,7 +61,7 @@ namespace BookStore.Controllers
                     };
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return new ResultDto
                 {
@@ -70,5 +71,44 @@ namespace BookStore.Controllers
             }
 
         }
+
+        [HttpPost]
+        public ResultDto AddCategory([FromBody]CategoryDto dto)
+        {
+            try
+            {
+                if (dto != null)
+                {
+                    Category newC = new Category()
+                    {
+                        Name = dto.Name
+                    };
+                    _context.Categories.Add(newC);
+                    _context.SaveChanges();
+                    return new ResultDto
+                    {
+                        IsSuccessful = true,
+                        Message = "Successfully added"
+                    };
+                }
+                else
+                {
+                    return new ResultDto
+                    {
+                        IsSuccessful = false,
+                        Message = "Model is null"
+                    };
+                }
+            }
+            catch (Exception)
+            {
+                return new ResultDto
+                {
+                    IsSuccessful = false,
+                    Message = "Something goes wrong"
+                };
+            }
+        }
+
     }
 }
